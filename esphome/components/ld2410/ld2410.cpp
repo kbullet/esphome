@@ -255,16 +255,16 @@ void LD2410Component::handle_periodic_data_(uint8_t *buffer, int len) {
   } else {
     for (auto *s : this->gate_move_sensors_) {
       if (s != nullptr && !std::isnan(s->get_state())) {
-        s->publish_state(NAN);
+        s->publish_state(0);
       }
     }
     for (auto *s : this->gate_still_sensors_) {
       if (s != nullptr && !std::isnan(s->get_state())) {
-        s->publish_state(NAN);
+        s->publish_state(0);
       }
     }
     if (this->light_sensor_ != nullptr && !std::isnan(this->light_sensor_->get_state())) {
-      this->light_sensor_->publish_state(NAN);
+      this->light_sensor_->publish_state(0);
     }
   }
 #endif
