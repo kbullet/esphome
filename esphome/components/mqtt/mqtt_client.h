@@ -264,7 +264,7 @@ class MQTTClientComponent : public Component {
   void set_on_disconnect(mqtt_on_disconnect_callback_t &&callback);
 
   // Publish None state instead of NaN for Home Assistant
-  void set_publish_nan_as_none(bool publish_nan_as_none_);
+  void set_publish_nan_as_none(bool publish_nan_as_none);
   bool is_publish_nan_as_none() const;
 
  protected:
