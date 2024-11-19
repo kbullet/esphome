@@ -454,6 +454,7 @@ async def to_code(config):
     if CONF_PUBLISH_NAN_AS_NONE in config:
         cg.add(var.set_publish_nan_as_none(config[CONF_PUBLISH_NAN_AS_NONE]))
 
+
 MQTT_PUBLISH_ACTION_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.use_id(MQTTClientComponent),
