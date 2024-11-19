@@ -955,6 +955,7 @@ CONF_X_GRID = "x_grid"
 CONF_Y_GRID = "y_grid"
 CONF_YEAR = "year"
 CONF_ZERO = "zero"
+CONF_PUBLISH_NAN_AS_NONE = "publish_nan_as_none"
 
 TYPE_GIT = "git"
 TYPE_LOCAL = "local"
