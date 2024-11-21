@@ -297,7 +297,7 @@ CONFIG_SCHEMA = cv.All(
                     cv.Optional(CONF_QOS, default=0): cv.mqtt_qos,
                 }
             ),
-            cv.Optional(CONF_PUBLISH_NAN_AS_NONE): cv.boolean,
+            cv.Optional(CONF_PUBLISH_NAN_AS_NONE, default=False): cv.boolean,
         }
     ),
     validate_config,
@@ -451,8 +451,7 @@ async def to_code(config):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
         await automation.build_automation(trigger, [], conf)
 
-    if CONF_PUBLISH_NAN_AS_NONE in config:
-        cg.add(var.set_publish_nan_as_none(config[CONF_PUBLISH_NAN_AS_NONE]))
+    cg.add(var.set_publish_nan_as_none(config[CONF_PUBLISH_NAN_AS_NONE]))
 
 
 MQTT_PUBLISH_ACTION_SCHEMA = cv.Schema(
