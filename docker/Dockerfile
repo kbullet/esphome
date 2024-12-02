@@ -99,15 +99,17 @@ BUILD_DEPS="
     libfreetype-dev=2.12.1+dfsg-5+deb12u3
     libssl-dev=3.0.15-1~deb12u1
     libffi-dev=3.4.4-1
-    libopenjp2-7=2.5.0-2
-    libtiff6=4.5.0-6+deb12u1
     cargo=0.66.0+ds1-1
     pkg-config=1.8.1-1
+"
+LIB_DEPS="
+    libtiff6=4.5.0-6+deb12u1
+    libopenjp2-7=2.5.0-2
 "
 if [ "$TARGETARCH$TARGETVARIANT" = "arm64" ] || [ "$TARGETARCH$TARGETVARIANT" = "armv7" ]
 then
     apt-get update
-    apt-get install -y --no-install-recommends $BUILD_DEPS
+    apt-get install -y --no-install-recommends $BUILD_DEPS $LIB_DEPS
 fi
 
 CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse CARGO_HOME=/root/.cargo
@@ -207,11 +209,12 @@ ENV \
   PLATFORMIO_CORE_DIR=/esphome/.temp/platformio
 
 RUN \
-    apt-get update \
+    curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc \
+    && echo "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm-18 main" > /etc/apt/sources.list.d/llvm.sources.list \
+    && apt-get update \
     # Use pinned versions so that we get updates with build caching
     && apt-get install -y --no-install-recommends \
         clang-format-13=1:13.0.1-11+b2 \
-        clang-tidy-14=1:14.0.6-12 \
         patch=2.7.6-7 \
         software-properties-common=0.99.30-4.1~deb12u1 \
         nano=7.2-1+deb12u1 \
@@ -225,6 +228,9 @@ RUN \
 COPY requirements_test.txt /
 RUN if [ "$TARGETARCH$TARGETVARIANT" = "armv7" ]; then \
         export PIP_EXTRA_INDEX_URL="https://www.piwheels.org/simple"; \
+  else \
+    # move this up into RUN above after armv7 is retired
+    apt-get install -y --no-install-recommends clang-tidy-18=1:18.1.8~++20240731024826+3b5b5c1ec4a3-1~exp1~20240731144843.145 ; \
   fi; \
   pip3 install \
   --break-system-packages --no-cache-dir -r /requirements_test.txt
